@@ -3,6 +3,7 @@ package yoffe.mco364.paint;
 public class Point {
 	private int x;
 	private int y;
+	private boolean visited;
 
 	Point(int x, int y) {
 		this.x = x;
@@ -25,4 +26,7 @@ public class Point {
 		return y;
 	}
 	
+	public void setVisited(){
+		visited = true;
+	}
 }

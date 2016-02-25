@@ -15,7 +15,7 @@ public class PaintFrame extends JFrame {
 		Container container = getContentPane();
 		container.setLayout(new BorderLayout());
 		
-		Canvas canvas = new Canvas();
+		CanvasGood canvas = new CanvasGood();
 		container.add(canvas, BorderLayout.CENTER);
 		
 	}
