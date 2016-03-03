@@ -7,10 +7,18 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class BucketTool implements Tool {
+	
+	private BufferedImage image;
+	private Color color;
 
-	public void mousePressed(Graphics g, int x, int y, BufferedImage img) {
+	public BucketTool(BufferedImage image, Color color){
+		this.image = image;
+		this.color = color;
+	}
 
-		fill(x, y, img.getRGB(x, y), Color.MAGENTA.getRGB(), img);
+	public void mousePressed(Graphics g, int x, int y) {
+
+		fill(x, y, image.getRGB(x, y), color.getRGB(), image);
 
 	}
 
@@ -27,7 +35,6 @@ public class BucketTool implements Tool {
 					&& img.getRGB(x, y) == oldColor) {
 
 				img.setRGB(x, y, newColor);
-				System.out.println(x + "   " + y);
 
 				queue.add(new Point(x - 1, y));
 				queue.add(new Point(x + 1, y));
@@ -57,5 +64,6 @@ public class BucketTool implements Tool {
 		// TODO Auto-generated method stub
 
 	}
+
 
 }

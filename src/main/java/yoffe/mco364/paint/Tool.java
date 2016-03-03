@@ -11,6 +11,6 @@ public interface Tool {
 	
 	void drawPreview(Graphics g);
 
-	void mousePressed(Graphics graphics, int x, int y, BufferedImage bufferedImage);
+	void mousePressed(Graphics graphics, int x, int y);
 
 }

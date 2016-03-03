@@ -2,13 +2,17 @@ package yoffe.mco364.paint;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 public class RecTool implements Tool {
 	private int endX, endY, startX, startY;
 	private int width, height;
+	private Color color;
 
-	public void mousePressed(Graphics g, int x, int y, BufferedImage img) {
+	public RecTool(Color color){
+		this.color = color;
+	}
+
+	public void mousePressed(Graphics g, int x, int y) {
 		this.startX = endX = x;
 		this.startY = endY = y;
 		this.width = this.height = 0;
@@ -21,7 +25,7 @@ public class RecTool implements Tool {
 		endX = x;
 		endY = y;
 
-		g.setColor(Color.RED);
+		g.setColor(color);
 		if (endX < startX && endY < startY) {
 			g.drawRect(endX, endY, width, height);
 		} else if (endX < startX) {
@@ -41,7 +45,7 @@ public class RecTool implements Tool {
 	}
 
 	public void drawPreview(Graphics g) {
-		g.setColor(Color.RED);
+		g.setColor(color);
 
 		if (endX < startX && endY < startY) {
 			g.drawRect(endX, endY, width, height);
