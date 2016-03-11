@@ -1,28 +1,30 @@
 package yoffe.mco364.paint;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
-public class OvalTool implements Tool {
+public class OvalTool extends Tool {
+
+
 	private int startX, startY, endX, endY;
 	private int width, height;
-	private Color color;
 
-	public OvalTool(Color color){
-		this.color = color;
+	public OvalTool(PaintProperties properties) {
+		super(properties);
 	}
-	
+
+	@Override
 	public void mousePressed(Graphics g, int x, int y) {
 		startX = endX = x;
 		startY = endY = y;
 		width = height = 0;
 	}
 
+	@Override
 	public void mouseReleased(Graphics g, int x, int y) {		
 		this.width = Math.abs(x - startX);
 		this.height = Math.abs(y - startY);
-		
-		g.setColor(color);
+
+		g.setColor(properties.getColor());
 		if (x < startX && y < startY) {
 			g.drawOval(x, y, width, height);
 		} else if (x < startX) {
@@ -34,6 +36,7 @@ public class OvalTool implements Tool {
 		}
 	}
 
+	@Override
 	public void mouseDragged(Graphics g, int x, int y) {
 		this.width = Math.abs(x - startX);
 		this.height = Math.abs(y - startY);
@@ -41,8 +44,9 @@ public class OvalTool implements Tool {
 		this.endY = y;
 	}
 
+	@Override
 	public void drawPreview(Graphics g) {
-		g.setColor(color);
+		g.setColor(properties.getColor());
 		if (endX < startX && endY < startY) {
 			g.drawOval(endX, endY, width, height);
 		} else if (endX < startX) {

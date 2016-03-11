@@ -15,71 +15,57 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class PaintFrame extends JFrame implements ActionListener {
-	private JButton line, pencil, bucket, oval, rectangle, color, undo, redo,
-	lastUsed;
-	private final Canvas canvas;
-	private Color newColor;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 
-	public PaintFrame() {
+
+public class PaintFrame extends JFrame implements ActionListener {
+	private JButton color, undo, redo, lastUsed;
+	private final Canvas canvas;
+	private PaintProperties properties;
+
+	@Inject
+	public PaintFrame(PaintProperties properties) {
 		setTitle("PaintFrame");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		Container container = getContentPane();
 		container.setLayout(new BorderLayout());
-		newColor = Color.BLACK;
-		canvas = new Canvas();
+
+		this.properties = properties;
+		canvas = new Canvas(properties);
 
 		JPanel tools = new JPanel();
 		tools.setLayout(new GridLayout(1, 7));
 
-		line = new JButton();
-		line.addActionListener(this);
-		line.setIcon(new ImageIcon(new ImageIcon("./line.png").getImage()
-				.getScaledInstance(35, 35, Image.SCALE_SMOOTH)));
-		line.setBackground(Color.WHITE);
+		ToolButton buttons[] = new ToolButton[] {
+				new ToolButton(new LineTool(properties), "/line.png"),
+				new ToolButton(new PencilTool(properties), "/pencil.jpg"),
+				new ToolButton(new BucketTool(canvas.getBufferedImage(),
+						properties), "/bucket.png"),
+						new ToolButton(new OvalTool(properties), "/oval.jpg"),
+						new ToolButton(new RecTool(properties), "/rectangle.jpg") };
 
-		pencil = new JButton();
-		pencil.addActionListener(this);
-		pencil.setIcon(new ImageIcon(new ImageIcon("./pencil.jpg").getImage()
-				.getScaledInstance(35, 35, Image.SCALE_SMOOTH)));
-		pencil.setBackground(Color.WHITE);
-
-		bucket = new JButton();
-		bucket.addActionListener(this);
-		bucket.setIcon(new ImageIcon(new ImageIcon("./bucket.png").getImage()
-				.getScaledInstance(35, 35, Image.SCALE_SMOOTH)));
-		bucket.setBackground(Color.WHITE);
-
-		oval = new JButton();
-		oval.addActionListener(this);
-		oval.setIcon(new ImageIcon(new ImageIcon("./oval.jpg").getImage()
-				.getScaledInstance(35, 35, Image.SCALE_SMOOTH)));
-		oval.setBackground(Color.WHITE);
-
-		rectangle = new JButton();
-		rectangle.addActionListener(this);
-		rectangle.setIcon(new ImageIcon(new ImageIcon("./rectangle.jpg")
-		.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH)));
-		rectangle.setBackground(Color.WHITE);
-
-		color = new JButton();
-		color.setBackground(newColor);
+		color = new JButton(new ImageIcon(new ImageIcon(getClass().getResource(
+				"/color.png")).getImage().getScaledInstance(125, 100,
+						Image.SCALE_SMOOTH)));
+		color.setBackground(Color.WHITE);
 		color.addActionListener(this);
 
-		lastUsed = pencil;
+		lastUsed = buttons[1];
 
 		JPanel undoRedo = new JPanel();
 		undoRedo.setLayout(new GridLayout(2, 1));
 
 		undo = new JButton();
-		undo.setIcon(new ImageIcon(new ImageIcon("./undo.png").getImage()
+		undo.setIcon(new ImageIcon(new ImageIcon("undo.png").getImage()
 				.getScaledInstance(35, 35, Image.SCALE_SMOOTH)));
 		undo.setBackground(Color.WHITE);
 
 		redo = new JButton();
-		redo.setIcon(new ImageIcon(new ImageIcon("./redo.png").getImage()
+		redo.setIcon(new ImageIcon(new ImageIcon("redo.png").getImage()
 				.getScaledInstance(35, 35, Image.SCALE_SMOOTH)));
 		redo.setBackground(Color.WHITE);
 
@@ -90,9 +76,7 @@ public class PaintFrame extends JFrame implements ActionListener {
 
 			public void actionPerformed(ActionEvent e) {
 				canvas.undo();
-
 			}
-
 		});
 
 		redo.addActionListener(new ActionListener() {
@@ -105,11 +89,10 @@ public class PaintFrame extends JFrame implements ActionListener {
 		});
 
 		tools.add(undoRedo);
-		tools.add(line);
-		tools.add(pencil);
-		tools.add(oval);
-		tools.add(rectangle);
-		tools.add(bucket);
+		for (ToolButton b : buttons) {
+			tools.add(b);
+			b.addActionListener(this);
+		}
 		tools.add(color);
 
 		container.add(canvas, BorderLayout.CENTER);
@@ -118,7 +101,9 @@ public class PaintFrame extends JFrame implements ActionListener {
 	}
 
 	public static void main(String[] args) {
-		new PaintFrame().setVisible(true);
+		Injector injector = Guice.createInjector(new PaintModule());
+		PaintFrame frame = injector.getInstance(PaintFrame.class);
+		frame.setVisible(true);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -127,37 +112,21 @@ public class PaintFrame extends JFrame implements ActionListener {
 		lastUsed.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
 		if (source == color) {
-			newColor = JColorChooser
-					.showDialog(this, "Color Chooser", newColor);
-			if (newColor != null) {
-				color.setBackground(newColor);
-				canvas.setColor(newColor);
+			properties.setColor(JColorChooser.showDialog(this, "Color Chooser",
+					properties.getColor()));
+			if (properties.getColor() != null) {
+				color.setBackground(properties.getColor());
+				canvas.setColor(properties.getColor());
 			}
 			color.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-			setTool(lastUsed);
+			canvas.setTool(((ToolButton) lastUsed).getTool());
+
 			lastUsed.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
 		} else {
-			setTool(source);
+			canvas.setTool(((ToolButton) source).getTool());
+			lastUsed = source;
 		}
 
 	}
 
-	public void setTool(JButton button) {
-		if (button == line) {
-			canvas.setTool(new LineTool(newColor));
-			lastUsed = line;
-		} else if (button == pencil) {
-			canvas.setTool(new PencilTool(newColor));
-			lastUsed = pencil;
-		} else if (button == oval) {
-			canvas.setTool(new OvalTool(newColor));
-			lastUsed = oval;
-		} else if (button == rectangle) {
-			canvas.setTool(new RecTool(newColor));
-			lastUsed = rectangle;
-		} else if (button == bucket) {
-			canvas.setTool(new BucketTool(canvas.getBufferedImage(), newColor));
-			lastUsed = bucket;
-		}
-	}
 }

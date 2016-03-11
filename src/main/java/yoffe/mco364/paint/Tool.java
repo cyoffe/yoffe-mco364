@@ -1,16 +1,21 @@
 package yoffe.mco364.paint;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
-public interface Tool {
+public abstract class Tool {
 
-	void mouseReleased(Graphics g, int x, int y);
+	protected PaintProperties properties;
 
-	void mouseDragged(Graphics g, int x, int y);
-	
-	void drawPreview(Graphics g);
+	public Tool(PaintProperties properties2) {
+		this.properties = properties2;
+	}
 
-	void mousePressed(Graphics graphics, int x, int y);
+	abstract void mouseReleased(Graphics g, int x, int y);
+
+	abstract void mouseDragged(Graphics g, int x, int y);
+
+	abstract void drawPreview(Graphics g);
+
+	abstract void mousePressed(Graphics graphics, int x, int y);
 
 }

@@ -11,19 +11,24 @@ import java.util.Stack;
 import javax.swing.JPanel;
 
 public class Canvas extends JPanel {
+	private static final int HEIGHT = 600;
+	private static final int WIDTH = 800;
 	private static final long serialVersionUID = 1L;
 	private BufferedImage buffer;
 	private Tool tool;
 	private Color color;
 	private Stack<BufferedImage> undo, redo;
+	private PaintProperties properties;
 
 
 
-	public Canvas() {
+	public Canvas(PaintProperties properties2) {
+
 		setBackground(Color.WHITE);
-		buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
+		buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		properties = properties2;
 		color = Color.BLACK;
-		tool = new PencilTool(color);
+		tool = new PencilTool(properties);
 
 		undo = new Stack<BufferedImage>();
 		redo = new Stack<BufferedImage>();
@@ -103,5 +108,9 @@ public class Canvas extends JPanel {
 	public void setColor(Color newColor) {
 		this.color = newColor;
 
+	}
+
+	public Tool getTool() {
+		return tool;
 	}
 }

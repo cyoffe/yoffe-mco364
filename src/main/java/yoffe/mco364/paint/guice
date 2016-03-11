@@ -1,0 +1,4 @@
+guice is easy to understand
+dagger is similar to juice but harder to understand
+
+dependency graph - we shouldn't have to make it ourself
