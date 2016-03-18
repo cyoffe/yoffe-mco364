@@ -3,6 +3,9 @@ package yoffe.mco364.paint;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+import javax.inject.Singleton;
+
+@Singleton
 public class PaintProperties {
 	private int width;
 	private int height;
@@ -65,8 +68,6 @@ public class PaintProperties {
 	public BufferedImage getImage() {
 		return image;
 	}
-
-
 
 
 }

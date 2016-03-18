@@ -8,8 +8,11 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.swing.JPanel;
 
+@Singleton
 public class Canvas extends JPanel {
 	private static final int HEIGHT = 600;
 	private static final int WIDTH = 800;
@@ -20,8 +23,7 @@ public class Canvas extends JPanel {
 	private Stack<BufferedImage> undo, redo;
 	private PaintProperties properties;
 
-
-
+	@Inject
 	public Canvas(PaintProperties properties2) {
 
 		setBackground(Color.WHITE);
