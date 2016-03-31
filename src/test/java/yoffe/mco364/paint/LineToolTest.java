@@ -1,13 +1,10 @@
 package yoffe.mco364.paint;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import yoffe.mco364.paint.LineTool;
-import yoffe.mco364.paint.PaintProperties;
 
 public class LineToolTest {
 	/*
@@ -24,8 +21,8 @@ public class LineToolTest {
 
 		Mockito.when(properties.getColor()).thenReturn(Color.RED);
 
-		// create a fake graphics object
-		Graphics g = Mockito.mock(Graphics.class);
+		// create a fake Graphics2D object
+		Graphics2D g = Mockito.mock(Graphics2D.class);
 
 		tool.mousePressed(g, 5, 5);
 		tool.mouseReleased(g, 10, 10);
@@ -47,7 +44,7 @@ public class LineToolTest {
 
 		Mockito.when(properties.getColor()).thenReturn(Color.RED);
 
-		Graphics g = Mockito.mock(Graphics.class);
+		Graphics2D g = Mockito.mock(Graphics2D.class);
 
 		tool.mousePressed(g, 6, 5);
 		tool.mouseDragged(g, 9, 7);
