@@ -1,6 +1,6 @@
 package yoffe.mco364.paint;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class RecTool extends Tool {
 
@@ -15,14 +15,14 @@ public class RecTool extends Tool {
 	}
 
 	@Override
-	public void mousePressed(Graphics g, int x, int y) {
+	public void mousePressed(Graphics2D g, int x, int y) {
 		this.startX = endX = x;
 		this.startY = endY = y;
 		this.width = this.height = 0;
 	}
 
 	@Override
-	public void mouseReleased(Graphics g, int x, int y) {
+	public void mouseReleased(Graphics2D g, int x, int y) {
 
 		this.width = Math.abs(x - startX);
 		this.height = Math.abs(y - startY);
@@ -42,7 +42,7 @@ public class RecTool extends Tool {
 	}
 
 	@Override
-	public void mouseDragged(Graphics g, int x, int y) {
+	public void mouseDragged(Graphics2D g, int x, int y) {
 		this.endX = x;
 		this.endY = y;
 		this.width = Math.abs(x - startX);
@@ -50,7 +50,7 @@ public class RecTool extends Tool {
 	}
 
 	@Override
-	public void drawPreview(Graphics g) {
+	public void drawPreview(Graphics2D g) {
 		g.setColor(properties.getColor());
 
 		if (endX < startX && endY < startY) {

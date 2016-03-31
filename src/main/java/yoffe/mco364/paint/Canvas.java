@@ -2,6 +2,7 @@ package yoffe.mco364.paint;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -49,14 +50,14 @@ public class Canvas extends JPanel {
 			public void mousePressed(MouseEvent event) {
 				undo.push(new BufferedImage(buffer.getColorModel(), buffer
 						.copyData(null), buffer.isAlphaPremultiplied(), null));
-				tool.mousePressed(buffer.getGraphics(), event.getX(),
+				tool.mousePressed(buffer.createGraphics(), event.getX(),
 						event.getY());
 				repaint();
 
 			}
 
 			public void mouseReleased(MouseEvent event) {
-				tool.mouseReleased(buffer.getGraphics(), event.getX(),
+				tool.mouseReleased(buffer.createGraphics(), event.getX(),
 						event.getY());
 				repaint();
 			}
@@ -64,7 +65,7 @@ public class Canvas extends JPanel {
 		this.addMouseMotionListener(new MouseMotionListener() {
 
 			public void mouseDragged(MouseEvent event) {
-				tool.mouseDragged(buffer.getGraphics(), event.getX(),
+				tool.mouseDragged(buffer.createGraphics(), event.getX(),
 						event.getY());
 				repaint();
 			}
@@ -86,8 +87,9 @@ public class Canvas extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;		
 		g.drawImage(buffer, 0, 0, null);
-		tool.drawPreview(g);
+		tool.drawPreview(g2);
 
 	}
 
