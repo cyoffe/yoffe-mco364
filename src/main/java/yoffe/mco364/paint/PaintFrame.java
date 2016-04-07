@@ -2,6 +2,12 @@ package yoffe.mco364.paint;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javax.swing.JFrame;
 
@@ -27,7 +33,16 @@ public class PaintFrame extends JFrame {
 		setVisible(true);
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SecurityException, IOException {
+
+		Logger logger = Logger.getLogger("yoffe.mco364.paint");
+		logger.setLevel(Level.INFO);
+		Handler handler = new FileHandler("log.txt"); 
+		handler.setLevel(Level.INFO);
+		handler.setFormatter(new SimpleFormatter());
+		logger.addHandler(handler);
+
+
 		Injector injector = Guice.createInjector(new PaintModule());
 		PaintFrame frame = injector.getInstance(PaintFrame.class);
 	}

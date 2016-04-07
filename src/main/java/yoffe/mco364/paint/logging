@@ -1,0 +1,26 @@
+
+-each class gets its own logger
+-in main:
+	want to tell logger that want to change the log level to log 
+	everything of the logger and above
+		-the default level is INFO
+		-put package name in the logger parameter
+		-create a handler to log it to anywhere you specify
+			ConsoleHandler - print to console
+			FileHandler, 
+
+different levels of logging
+
+SEVERE -
+	- exception thrown and will ruin app
+	
+WARNING - 
+	- something you should pay attention to but won't necessarily ruin app
+	
+INFO - 
+	- message of events of app
+	
+CONFIG - 
+	- want to make sure that app is configured properly
+	
+FINE, FINER, FINEST - use for debugging
